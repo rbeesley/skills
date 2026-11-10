@@ -1,6 +1,6 @@
-# Matt Pocock Skills
+# Rbeesley Skills
 
-A collection of agent skills (slash commands and behaviors) loaded by Claude Code. Skills are organized into buckets and consumed by per-repo configuration emitted by `/setup-matt-pocock-skills`.
+A collection of agent skills for repository-aware engineering in Copilot and Azure DevOps, derived from Matt Pocock's skills.
 
 ## Language
 

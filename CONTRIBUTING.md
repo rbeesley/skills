@@ -1,25 +1,13 @@
 # Contributing
 
-Every issue is judged against the bar in [`SCOPE.md`](./SCOPE.md). Read it first.
+This is the Copilot/ADO adaptation of [Matt Pocock's skills](https://github.com/mattpocock/skills), maintained at [rbeesley/skills](https://github.com/rbeesley/skills). Preserve upstream attribution and the MIT license. Report fork-specific problems here, not in upstream.
 
-## Where each request goes
+Read `AGENTS.md` (linked to `CLAUDE.md`) and `SCOPE.md`. Keep promoted skills, manifest entries, README/bucket entries, docs, and the ask-rbeesley router consistent. Shared provider rules belong in environment-workflow rather than independent variants in every skill.
 
-| You have | Go to |
-| --- | --- |
-| A bug in a skill | [Bug issue](https://github.com/mattpocock/skills/issues/new?template=bug.yml) |
-| A change to an existing skill | [Idea or feedback issue](https://github.com/mattpocock/skills/issues/new?template=idea.yml) |
-| A question, or "how do I...?" | [Discussions: Q&A](https://github.com/mattpocock/skills/discussions/categories/q-a) |
-| An idea for a new skill, or a skill to donate | [Discussions: Ideas](https://github.com/mattpocock/skills/discussions/categories/ideas) |
-| Support for another harness or issue tracker | [Discussions: Ideas](https://github.com/mattpocock/skills/discussions/categories/ideas), after you read [`.out-of-scope/`](./.out-of-scope) |
+Use synthetic public examples. Never commit private PR bodies, team identities, work-item IDs, private repository links, or credentials. Read-only inspection and drafts must remain distinct from remote writes, work-item transitions, and merge authorization.
 
-Pull requests are open to collaborators only, so describe the fix in an issue instead.
+Run `npm test` and `npm run check-plugin-version`. Preview packaging with a separate `COPILOT_HOME` or session-only plugin directory before changing installed plugins. Add focused regression cases for changed workflow boundaries, and state what static checks cannot prove.
 
-## Issues written with AI
+`npm test` checks packaging, invocation metadata, documentation links, and safety-contract text, not model behavior. For a behavioral acceptance pass, give a fresh read-only Copilot session the scenario `request` fields from `scripts/fixtures/workflow-scenarios.json`, without the expected `required`/`forbidden` fields. Have it apply the loaded skills hypothetically rather than execute remote actions. Compare its prescribed actions against those withheld expectations and retain the actual output with the evaluation result. Passing scenarios do not prove every future model response.
 
-Agents are welcome to help, but you post the issue, so you own it:
-
-- **One problem per issue.** Several findings from one session are several issues, or none.
-- **Short.** If it does not fit on one screen, cut it.
-- **Repro first.** The steps that show the problem come before any analysis.
-- **No pasted specs.** No full proposals, plans, or rewritten `SKILL.md` files. Describe the problem; the fix is ours to design.
-- **Not your project's issues.** If your agent files the specs or tickets for your own project here, it has the wrong repo. Run `/setup-matt-pocock-skills` in your project.
+Keep changes feature-bounded and preserve unrelated edits. Opening a PR or enabling auto-merge is not implied by implementing a change.

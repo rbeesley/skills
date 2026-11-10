@@ -1,4 +1,16 @@
-# mattpocock-skills
+# rbeesley-skills
+
+## 1.4.0
+
+- Establish `rbeesley-skills@rbeesley` as the independently maintained Copilot/ADO fork, preserving upstream attribution and MIT license.
+- Rename setup/router commands to `setup-rbeesley-skills` and `ask-rbeesley` and update their operational pointers.
+- Add shared provider discovery, authorization boundaries, native ADO relation verification, branch topology, and project-specific lifecycle gates.
+- Replace the imposed PR format with repository instructions/templates and representative team conventions.
+- Wire setup, planning, triage, implementation, review, prototype capture, and wizard platform boundaries to the repository contract.
+- Document isolated preview, live local activation, source switching, and rollback without disturbing other plugins.
+- Add offline packaging/contract regression checks and read-only behavioral scenarios.
+
+Versions below are preserved upstream mattpocock-skills history, not fork installation instructions.
 
 ## 1.3.2
 

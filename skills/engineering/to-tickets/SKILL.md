@@ -8,7 +8,9 @@ disable-model-invocation: true
 
 Break a plan, spec, or conversation into a set of **tickets**: tracer-bullet vertical slices, each declaring the tickets that **block** it.
 
-The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
+Call the Skill tool with "environment-workflow" before fetching or publishing tracker work. Use discovered item types, required fields, hierarchy and directed dependency relations, and verify links after creation.
+
+The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-rbeesley-skills`.
 
 ## Process
 
@@ -57,12 +59,14 @@ Iterate until the user approves the breakdown.
 
 ### 5. Publish the tickets to the configured tracker
 
-Publish the approved tickets. **How** depends on the tracker `/setup-matt-pocock-skills` configured; the tickets are the same either way, only the shape of the blocking edges changes:
+Publish the approved tickets. **How** depends on the tracker `/setup-rbeesley-skills` configured; the tickets are the same either way, only the shape of the blocking edges changes:
 
 - **Local files** → write one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order (blockers first). Each file's "Blocked by" lists the numbers/titles it depends on. Use the per-ticket file template below: one ticket per file, never a single combined file.
-- **A real issue tracker (GitHub, Linear, …)** → publish one issue per ticket in dependency order (blockers first) so each ticket's blocking edges can reference real identifiers. Use the platform's native blocking relationship where it has one; otherwise set each ticket's "Blocked by" to the blocking issues. If the source was an existing issue, make each ticket its sub-issue (tracker doc's operation). Apply the `ready-for-agent` triage label unless instructed otherwise; the tickets are agent-grabbable by construction.
+- **A real issue tracker (ADO, GitHub, GitLab, or configured custom tracker)**: publish one work item/issue per ticket in dependency order, using the discovered type and required fields. Use verified native blocking and parent/child relations from the tracker contract; for ADO distinguish predecessor/successor from hierarchy and `Related`. If native links are unavailable, report it and use textual dependencies only under the configured fallback policy. Apply `ready-for-agent` only through the existing role mapping; do not invent labels/tags/states.
 
-Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom.
+Read back each item and relation direction before reporting a verified graph. Distinguish item-creation success from relation failures and retain returned IDs to avoid duplicates on retry.
+
+Work the **frontier**: any ticket whose blockers meet the project's successful-delivery predicate. Rejection, abandonment, or a terminal state alone does not satisfy a dependency. For a purely linear chain that means top to bottom.
 
 Do NOT close or modify any parent issue.
 

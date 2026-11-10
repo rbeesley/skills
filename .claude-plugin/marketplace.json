@@ -1,15 +1,15 @@
 {
-  "name": "mattpocock",
+  "name": "rbeesley",
   "owner": {
-    "name": "Matt Pocock",
-    "url": "https://www.aihero.dev"
+    "name": "rbeesley",
+    "url": "https://github.com/rbeesley"
   },
-  "description": "Matt Pocock's skills for real engineering, as an installable Claude Code plugin.",
+  "description": "Repository-aware Copilot and ADO skills, adapted from Matt Pocock's MIT-licensed skills.",
   "plugins": [
     {
-      "name": "mattpocock-skills",
+      "name": "rbeesley-skills",
       "source": "./",
-      "description": "Matt Pocock's agent skills for real engineering (grilling, spec/ticket flows, TDD, code review, domain modelling and more).",
+      "description": "Copilot and ADO workflow, repository-shaped PRs, spec/ticket flows, TDD, review and domain modelling.",
       "category": "engineering",
       "keywords": [
         "engineering",

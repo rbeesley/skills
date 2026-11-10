@@ -10,7 +10,9 @@ Two-axis review of the diff between `HEAD` and a fixed point the user supplies:
 
 Both axes run as **parallel sub-agents** so they don't pollute each other's context, then this skill aggregates their findings. Start every sub-agent with a fresh context window.
 
-The issue tracker should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
+Call the Skill tool with "environment-workflow" to resolve repository and tracker context. Reviewing is read-only unless the user separately delegates edits or posting. Use available pending-review tools only when asked to draft comments, clearly distinguish staged from submitted reviews, and preserve inline thread identity for requested replies.
+
+The issue tracker should have been provided to you. If not, tell the user to run `/setup-rbeesley-skills`.
 
 ## Process
 
@@ -18,7 +20,7 @@ The issue tracker should have been provided to you. If not, tell the user to run
 
 Whatever the user said is the fixed point (a commit SHA, branch name, tag, `main`, `HEAD~5`, etc.). If they didn't specify one, ask for it.
 
-Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, so the comparison is against the merge-base). Also note the list of commits via `git log <fixed-point>..HEAD --oneline`.
+Capture the diff command once: `git diff <fixed-point>...HEAD` for branch/PR review (three-dot, against the merge-base). For requested work-in-progress review include the applicable staged/unstaged changes and record that scope explicitly; a HEAD-only diff must not silently exclude them. For stacked branches use the actual parent. Also note commits via `git log <fixed-point>..HEAD --oneline`.
 
 Before going further, confirm the fixed point resolves (`git rev-parse <fixed-point>`) and the diff is non-empty. A bad ref or empty diff should fail here, not inside two parallel sub-agents.
 
@@ -26,7 +28,7 @@ Before going further, confirm the fixed point resolves (`git rev-parse <fixed-po
 
 Look for the originating spec, in this order:
 
-1. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.), fetched via the workflow in the tracker doc.
+1. Verified linked work items on the PR, then provider-correct references in commit messages, fetched through the tracker contract. ADO `#<id>` is a work item and `!<id>` is a PR; a GitLab `!<id>` is a merge request, not the spec itself.
 2. A path the user passed as an argument.
 3. A spec file under `docs/`, `specs/`, or `.scratch/` matching the branch name or feature.
 4. If nothing is found, ask the user where the spec is. If they say there isn't one, the **Spec** sub-agent will skip and report "no spec available".

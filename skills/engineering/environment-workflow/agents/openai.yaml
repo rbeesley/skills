@@ -1,0 +1,3 @@
+interface:
+  display_name: Environment Workflow
+  short_description: Repository-aware Copilot, PR, and work-item workflow

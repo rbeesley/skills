@@ -1,15 +1,15 @@
 # Triage Labels
 
-The skills speak in terms of five canonical triage roles. This file maps those roles to the actual label strings used in this repo's issue tracker.
+The skills use semantic triage roles. This fork has not selected a repository triage workflow; inherited upstream role mappings are not verified fork policy. A read-only check found standard GitHub labels including `bug`, `enhancement`, `documentation`, `question`, and `wontfix`, but not the readiness labels below.
 
-| Label in mattpocock/skills | Label in our tracker | Meaning                                  |
+| Semantic role | Verified representation | Meaning |
 | -------------------------- | -------------------- | ---------------------------------------- |
-| `needs-triage`             | `needs-triage`       | Maintainer needs to evaluate this issue  |
-| `needs-info`               | `needs-info`         | Waiting on reporter for more information |
-| `ready-for-agent`          | `ready-for-agent`    | Fully specified, ready for an AFK agent  |
-| `ready-for-human`          | `ready-for-human`    | Requires human implementation            |
-| `wontfix`                  | `wontfix`            | Will not be actioned                     |
+| `needs-triage` | Unmapped | Maintainer needs to evaluate this issue |
+| `needs-info` | Unmapped | Waiting on reporter for more information |
+| `ready-for-agent` | Unmapped | Fully specified, ready for an AFK agent |
+| `ready-for-human` | Unmapped | Requires human implementation |
+| `wontfix` | Existing `wontfix` label; application requires authorization | Will not be actioned |
 
-When a skill mentions a role (e.g. "apply the AFK-ready triage label"), use the corresponding label string from this table.
+Report unmapped roles rather than create labels or infer a state transition. Category labels may be mapped during setup, but existence alone is not an agreed role mapping.
 
-Judge every issue against [`SCOPE.md`](../../SCOPE.md) before picking a state. Rejections close as "not planned".
+Judge issues against [`SCOPE.md`](../../SCOPE.md). Rejection, comments, label changes, and closure are separate authorized operations. No inherited rule automatically closes fork issues.

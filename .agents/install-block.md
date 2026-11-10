@@ -1,121 +1,40 @@
-# The canonical install block
+# Canonical fork installation
 
-One install story, one wording. `README.md`, `.changeset/*`, and every page under `docs/` must say **this** and nothing else. Change it here first, then propagate.
+The fork's plugin is `rbeesley-skills`, marketplace `rbeesley`, source `rbeesley/skills`. The upstream plugin is `mattpocock-skills@mattpocock`. Keep attribution, but never direct fork installation or updates to upstream.
 
-## Managed installs first
+## Local development and pre-merge activation
 
-Lead with installs that update themselves. Fall back to skills.sh, labelled "manual updates", only for agents that have no such install. Call a route managed only if it updates without the user running a command. Put any one-time opt-in beside its install command. Never promise "instant".
+Copilot supports a live local marketplace. It loads from the checkout rather than copying the plugin, so keep that checkout and branch available. This is the supported path while the adaptation exists only on a feature branch:
 
-Claude Code installs from its official marketplace, `claude-plugins-official`. Every other managed route installs from this repo's own marketplace, `.claude-plugin/marketplace.json` and `plugin.json`. Those routes reinstall only when the `version` in `plugin.json` changes. The Release workflow runs `npm run version`, which copies that field from `package.json`, so users get a release when the "chore: version skills" PR merges.
-
-| Agent         | Route                            | Updates itself?                                                  |
-| ------------- | -------------------------------- | ---------------------------------------------------------------- |
-| Claude Code   | `@claude-plugins-official`       | Yes, by default                                                  |
-| Codex         | `@mattpocock` marketplace        | Yes, at startup, by default                                      |
-| Copilot CLI   | `@mattpocock` marketplace        | Yes, after a one-time `autoUpdate: true`                         |
-| VS Code       | Chat: Install Plugin From Source | Yes, daily, by default                                           |
-| Gemini CLI    | `gemini skills install` (copies) | No. A Gemini extension would need a flat `skills/<name>/` layout |
-| Everyone else | skills.sh                        | No. Run `npx skills update`, and re-run `add` for new skills     |
-
-Sources (2026-10-08): Codex `core-plugins/src/manager.rs`; Copilot [cli-config-dir-reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference); VS Code `pluginAutoUpdate.ts`; Gemini `skillLoader.ts`.
-
-Nobody has run Auggie, Droid, Qwen or Goose against this repo, so they stay on skills.sh until someone does.
-
-## Claude Code
-
-<canonical-block name="claude-code">
-
-```bash
-claude plugin install mattpocock-skills@claude-plugins-official
+```powershell
+copilot plugin marketplace add D:\wt\GitHub\rbeesley\skills\copilot-ado
+copilot plugin install rbeesley-skills@rbeesley
 ```
 
-Updates itself by default.
+In isolation, set `COPILOT_HOME` to a new scratch directory first, or use `COPILOT_PLUGIN_DIR_ONLY=true` with `--plugin-dir <checkout>` for a session-only preview. Neither changes the normal installed set.
 
-</canonical-block>
+Before normal activation, record the installed set and preserve the existing settings. Install and verify the fork, then remove only `mattpocock-skills@mattpocock`. Retain its marketplace for rollback. Do not copy skills into personal directories too: that duplicates registrations. Preserve all unrelated marketplaces, plugins, and settings. Existing chats keep their loaded context; verify a fresh session without restarting them.
 
-## Codex
+Local live plugins update when their checkout changes, not from GitHub automatically. Pull/rebase deliberately; a development checkout is trusted executable configuration. Do not enable automatic updates on a local path.
 
-<canonical-block name="codex">
+## Published default-branch installation
 
-```bash
-codex plugin marketplace add mattpocock/skills
-codex plugin add mattpocock-skills@mattpocock
+Only after the intended fork revision is on its default branch:
+
+```powershell
+copilot plugin marketplace add rbeesley/skills
+copilot plugin install rbeesley-skills@rbeesley
 ```
 
-Updates itself at startup.
+If `rbeesley` is already registered as local, first remove that marketplace registration and re-add the GitHub source, then reinstall/verify the fork. Do not assume adding the same name changes its source. Use `copilot plugin update rbeesley-skills@rbeesley` for explicit updates. Automatic marketplace updates are optional and depend on the host's supported settings; do not silently enable them.
 
-</canonical-block>
+The current Copilot app and `agency copilot` share the installed Copilot plugin configuration on this machine. Confirm exposure in each desired host; support in CLI is not proof of loading in an already-running desktop conversation. VS Code is a separate host: its source-install entry is `https://github.com/rbeesley/skills`, after publication.
 
-## GitHub Copilot (CLI and VS Code)
+## Rollback
 
-Use the marketplace, not `copilot plugin install mattpocock/skills`. Copilot has deprecated direct repo installs, and they can't auto-update. The `extraKnownMarketplaces` entry follows the documented schema, but nobody has run it yet.
-
-<canonical-block name="copilot">
-
-```bash
-copilot plugin marketplace add mattpocock/skills
+```powershell
+copilot plugin uninstall rbeesley-skills@rbeesley
 copilot plugin install mattpocock-skills@mattpocock
 ```
 
-Then, once, add to `~/.copilot/settings.json`:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "mattpocock": { "source": { "source": "github", "repo": "mattpocock/skills" }, "autoUpdate": true }
-  }
-}
-```
-
-In VS Code, run **Chat: Install Plugin From Source** and enter `https://github.com/mattpocock/skills`. It updates daily.
-
-</canonical-block>
-
-## Gemini CLI
-
-Gemini doesn't read `.claude-plugin`, and `--path` takes one bucket. One install per promoted bucket gives exactly the promoted set (27 skills, verified 2026-10-07).
-
-<canonical-block name="gemini">
-
-```bash
-gemini skills install https://github.com/mattpocock/skills.git --path skills/engineering
-gemini skills install https://github.com/mattpocock/skills.git --path skills/productivity
-```
-
-Re-run both commands to update.
-
-</canonical-block>
-
-## Every other agent, or editable files (skills.sh)
-
-`-a` preselects the agent. Each agent in the comment was run on 2026-10-07. Prefer skills.sh to an agent's own repo installer, such as `amp skill add` or `pi install git:…`, because those also pull in `misc/` and `in-progress/`. `npx skills update` skips skills added upstream since `add`, so the block tells users to re-run `add`.
-
-<canonical-block name="other-agents">
-
-```bash
-npx skills@latest add mattpocock/skills -a <agent>  # cursor, opencode, devin, windsurf, amp, pi; omit -a to choose
-```
-
-When the installer asks which skills to take, include `setup-matt-pocock-skills`. To update, run `npx skills@latest update`, and re-run `add` to pick up new skills.
-
-</canonical-block>
-
-Use the single-skill form wherever one skill is named on its own. `docs/` pages don't use this block, because ai-hero renders the install widget above the page body. See [writing-docs.md](./writing-docs.md).
-
-<canonical-block name="skills-sh-one-skill">
-
-```bash
-npx skills@latest add mattpocock/skills --skill=<name>
-```
-
-```bash
-npx skills@latest update <name>
-```
-
-</canonical-block>
-
-`skills@latest` is the pinned spelling everywhere.
-
-## The two routes are exclusive
-
-The plugin is a managed, read-only bundle you subscribe to. skills.sh writes files you own and edit. Installing both leaves the user with every skill twice: always say "pick one".
+Verify only one copy of each skill in a new session. Keep the local worktree until no live plugin or session depends on it. Other harnesses may consume the compatible `.claude-plugin` bundle, but this fork's activation checks target Copilot; upstream installation promises are not fork validation.

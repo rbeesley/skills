@@ -6,7 +6,9 @@ disable-model-invocation: true
 
 This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
 
-The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
+Call the Skill tool with "environment-workflow" before publishing. Use the configured work-item type, required fields and provider-native representation; do not assume every tracker accepts a GitHub issue body.
+
+The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-rbeesley-skills`.
 
 ## Process
 
@@ -16,7 +18,7 @@ The issue tracker and triage label vocabulary should have been provided to you. 
 
 Check with the user that these seams match their expectations.
 
-3. Write the spec using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
+3. Write the spec using the template below, adapting its fields to required repository forms, then publish it to the verified project tracker. Apply the `ready-for-agent` role only through its configured representation. If unmapped, report that gap rather than create a label, tag, or state. Verify the created item and return its actual reference. Publication does not authorize PR creation or work-item completion.
 
 <spec-template>
 

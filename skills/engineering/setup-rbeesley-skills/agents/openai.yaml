@@ -1,0 +1,5 @@
+interface:
+  display_name: "Setup Rbeesley Skills"
+  short_description: "Configure Copilot, tracker, PR, and work-item conventions"
+policy:
+  allow_implicit_invocation: false

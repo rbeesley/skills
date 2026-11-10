@@ -1,9 +1,11 @@
 ---
 name: wizard
-description: Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself.
+description: Guide a human through steps only they can perform. Use for credentials, CI secrets, third-party dashboards, or manual cutovers. Select native instructions for Windows/ADO; use the bundled bash/GitHub wizard only where compatible.
 ---
 
 # Wizard
+
+Call the Skill tool with "environment-workflow" before choosing shell, provider, or secret destinations. The bundled `template.sh` is a bash/GitHub implementation, not a native Windows or ADO adapter. The process below applies only when bash and the intended GitHub destinations are confirmed. Otherwise provide a precise platform-native checklist using available tools and verified provider instructions; report missing automation explicitly. Never send ADO secrets to GitHub or persist plaintext secrets by default. Prefer the approved secret store and hidden entry; explain any required `.env` persistence and keep it out of git.
 
 A **wizard** is a bash script that walks a human, step by step, through a manual procedure that's tedious to do by hand and tedious to re-explain to an AI every time. It opens each URL, says exactly what to click and copy, captures the values, writes them where they belong (`.env`, GitHub secrets), confirms at every stage, and shows how many stages are left. It might configure third-party services, run a one-off migration, or move the project from one state to another.
 
@@ -17,7 +19,7 @@ A wizard is ephemeral by default: built for one run, saved to a scratch or `scri
 
 Work out every manual step the human must take and every value that gets captured along the way. Read the repo first, don't ask cold:
 
-- For setup: `.env`, `.env.example`, `.env.*`, `README`, `docker-compose*`, framework config, and `.github/workflows/*` (every `secrets.*` / `vars.*` reference is a value the wizard must produce).
+- For setup: `.env`, `.env.example`, `.env.*`, `README`, `docker-compose*`, framework config, and the actual CI configuration (`.github/workflows/*`, `azure-pipelines.yml`, or configured template paths). Inventory referenced secrets/variables without displaying secret values.
 - For a migration or transition: the current state, the target state, and the irreversible actions between them.
 
 Then show the user the ordered list of stages and the values each produces, and confirm: they may add, drop, or reorder.
