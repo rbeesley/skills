@@ -1,6 +1,11 @@
 {
   "name": "rbeesley-skills",
-  "version": "1.4.0",
+  "version": "1.3.2-rbeesley.1",
+  "fork": {
+    "upstreamRepository": "https://github.com/mattpocock/skills",
+    "upstreamVersion": "1.3.2",
+    "revision": 1
+  },
   "private": true,
   "description": "Repository-aware engineering skills for GitHub Copilot and Azure DevOps, adapted from Matt Pocock's skills",
   "repository": {
@@ -10,7 +15,7 @@
   "license": "MIT",
   "scripts": {
     "changeset": "changeset",
-    "version": "changeset version && node scripts/sync-plugin-version.mjs",
+    "version": "node scripts/sync-plugin-version.mjs",
     "check-plugin-version": "node scripts/sync-plugin-version.mjs --check",
     "test": "node --test scripts/validate-plugin.test.mjs"
   },

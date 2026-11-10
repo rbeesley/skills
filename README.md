@@ -30,13 +30,21 @@ Rollback removes the fork and re-enables `mattpocock-skills@mattpocock` (or rein
 
 ## Configure each repository
 
-Run `/setup-rbeesley-skills`. It discovers code hosting and tracking independently, reads Copilot instruction files, and writes agreed repository configuration under `docs/agents/`. The router is `/ask-rbeesley`; upstream's setup/router command names are replaced, not installed as duplicate aliases.
+Select `/rbeesley-skills:setup-rbeesley-skills` in the fresh-session composer. It discovers code hosting and tracking independently, reads Copilot instruction files, and writes agreed repository configuration under `docs/agents/`. The router is `/rbeesley-skills:ask-rbeesley`; upstream's setup/router command names are replaced, not installed as duplicate aliases. These are user-only commands, not model-invoked skills; see [activation verification](./.agents/install-block.md#fresh-session-verification).
 
 ADO is a first-class tracker, not freeform GitHub emulation. Setup discovers actual work-item types, required fields, states, tags, hierarchy and directed dependencies, PR artifact links, and project completion gates. It maps semantic triage roles to existing taxonomy rather than inventing labels. Missing integration is reported explicitly.
 
 Drafting, read-only review, posting, linking, state changes, and merging remain separate permissions. ADO PR references use `!<id>` or full URLs; `#<id>` means a real work item. Text mentions do not verify native linkage. Test-project resolution-at-PR policies are conditional; production bugs and external validation retain their gates, and abandonment never means successful delivery.
 
 Private team PR samples are not distributed in this public fork. Repositories discover their own examples at runtime. GitHub and GitLab support remains; custom/local tracking follows the configured contract. The wizard's bundled bash/GitHub helper has explicit platform limitations rather than pretending to provision ADO.
+
+## Fork versioning
+
+The `fork` object in `package.json` is the authoritative upstream baseline and fork revision. `npm run version` derives the package and plugin release strings as `<upstreamVersion>-rbeesley.<revision>`; `npm run check-plugin-version` rejects drift from that metadata. Increment `fork.revision` for an intentional fork release. When deliberately adopting a new upstream baseline, update `fork.upstreamVersion` and restart the fork revision at `1`. Update the changelog and review the synchronized manifests before committing.
+
+The dependency lock retains its two intentional `0.0.0` root placeholders. Four-component versions are rejected by npm and mishandled by Changesets, so the fork uses a SemVer prerelease identifier rather than a fourth numeric component.
+
+Changesets remains available for upstream-history inspection, not fork version generation. Its ordinary patch release converts a fork prerelease to the unsuffixed upstream version, losing the fork revision. The inherited automatic Changesets version/tag workflow is therefore retired; publishing or tagging is a separate, explicit action. Use the metadata-driven commands above instead of `changeset version` or `npm version`.
 
 ## Engineering
 

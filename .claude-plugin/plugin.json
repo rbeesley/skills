@@ -1,6 +1,6 @@
 {
   "name": "rbeesley-skills",
-  "version": "1.4.0",
+  "version": "1.3.2-rbeesley.1",
   "description": "Repository-aware Copilot and Azure DevOps engineering skills, adapted from Matt Pocock's skills.",
   "author": {
     "name": "rbeesley",

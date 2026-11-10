@@ -23,6 +23,14 @@ Keep its cached files while existing chats may still reference them; uninstall o
 
 Local live plugins update when their checkout changes, not from GitHub automatically. Pull/rebase deliberately; a development checkout is trusted executable configuration. Do not enable automatic updates on a local path.
 
+## Fresh-session verification
+
+Use `copilot plugin list` to check the enabled fork's version and local source. In a fresh Agency CLI session, the `session.skills_loaded` JSON event records names, command names, user-invocable status, enabled status, and paths. In a fresh desktop chat, Agency Session Settings exposes the plugin version and enabled command inventory. Existing chats can retain the previously loaded plugin version; leave those chats running.
+
+Confirm `/rbeesley-skills:ask-rbeesley` and `/rbeesley-skills:setup-rbeesley-skills` are enabled from the fork, with the old router/setup names absent. Confirm the upstream plugin is disabled, unrelated plugins are preserved, and separately installed `guided-review` remains available. A model invocation of `environment-workflow` should resolve to the fork's checkout.
+
+The router and setup intentionally disable model invocation. Their omission from the model-visible skill list, or rejection by the model's Skill tool, does not disprove user-command registration. Verify them in the command inventory, then select the namespaced command directly in the human's composer when needed. A literal noninteractive `-p "/command ..."` prompt is not proof of composer dispatch. If the host's composer cannot be driven through supported read-only tools, report that execution check as requiring the human; keep invocation restrictions intact.
+
 ## Published default-branch installation
 
 Only after the intended fork revision is on its default branch:

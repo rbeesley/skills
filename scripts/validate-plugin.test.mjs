@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -27,6 +29,8 @@ test("fork identity and release versions agree while lock placeholders remain un
   assert.equal(pkg.name, "rbeesley-skills");
   assert.equal(plugin.name, pkg.name);
   assert.equal(plugin.version, pkg.version);
+  assert.equal(pkg.fork.upstreamRepository, "https://github.com/mattpocock/skills");
+  assert.equal(pkg.version, `${pkg.fork.upstreamVersion}-rbeesley.${pkg.fork.revision}`);
   assert.equal(lock.name, pkg.name);
   assert.equal(lock.version, "0.0.0");
   assert.equal(lock.packages[""].name, pkg.name);
@@ -40,6 +44,72 @@ test("fork identity and release versions agree while lock placeholders remain un
   assert.equal(json(".changeset/config.json").changelog[1].repo, "rbeesley/skills");
   assert.match(read("LICENSE"), /Copyright.*Matt Pocock/);
   assert.match(read("README.md"), /independently maintained/);
+});
+
+function versionFixture(t, overrides = {}) {
+  const dir = mkdtempSync(join(tmpdir(), "rbeesley-version-"));
+  t.after(() => rmSync(dir, { recursive: true }));
+  mkdirSync(join(dir, "scripts"));
+  mkdirSync(join(dir, ".claude-plugin"));
+  const manifest = {
+    version: "1.4.0",
+    fork: { ...pkg.fork, revision: 2 },
+    ...overrides,
+  };
+  writeFileSync(join(dir, "package.json"), JSON.stringify(manifest, null, 2));
+  writeFileSync(join(dir, ".claude-plugin", "plugin.json"), '{"version":"1.4.0"}\n');
+  writeFileSync(join(dir, "package-lock.json"), '{"version":"0.0.0","packages":{"":{"version":"0.0.0"}}}\n');
+  writeFileSync(join(dir, "scripts", "sync-plugin-version.mjs"), read("scripts/sync-plugin-version.mjs"));
+  return {
+    read: (path) => readFileSync(join(dir, path), "utf8"),
+    run: (...args) => spawnSync(process.execPath, [join(dir, "scripts", "sync-plugin-version.mjs"), ...args], { encoding: "utf8" }),
+  };
+}
+
+test("fork version sync derives the next revision without changing lock placeholders", (t) => {
+  const fixture = versionFixture(t);
+  const before = fixture.read("package.json");
+  const lock = fixture.read("package-lock.json");
+  const check = fixture.run("--check");
+  assert.equal(check.status, 1, check.stderr);
+  assert.match(check.stderr, /fork metadata requires 1\.3\.2-rbeesley\.2/);
+  assert.equal(fixture.read("package.json"), before);
+
+  const sync = fixture.run();
+  assert.equal(sync.status, 0, sync.stderr);
+  for (const path of ["package.json", ".claude-plugin/plugin.json"]) {
+    assert.equal(JSON.parse(fixture.read(path)).version, "1.3.2-rbeesley.2");
+  }
+  assert.equal(fixture.read("package-lock.json"), lock);
+  assert.equal(fixture.run("--check").status, 0);
+});
+
+test("invalid fork metadata fails before either release manifest is written", (t) => {
+  for (const fork of [
+    { ...pkg.fork, upstreamVersion: "1.3.2.1" },
+    { ...pkg.fork, upstreamVersion: "01.3.2" },
+    { ...pkg.fork, upstreamVersion: "9007199254740992.3.2" },
+    { ...pkg.fork, revision: 0 },
+    { ...pkg.fork, revision: "2" },
+    undefined,
+  ]) {
+    const fixture = versionFixture(t, { fork });
+    const before = fixture.read("package.json");
+    const result = fixture.run();
+    assert.equal(result.status, 1, result.stderr);
+    assert.match(result.stderr, /package\.json needs fork/);
+    assert.equal(fixture.read("package.json"), before);
+    assert.equal(JSON.parse(fixture.read(".claude-plugin/plugin.json")).version, "1.4.0");
+  }
+});
+
+test("fork release tooling cannot silently apply an upstream Changesets bump", () => {
+  assert.equal(pkg.scripts.version, "node scripts/sync-plugin-version.mjs");
+  for (const name of readdirSync(join(root, ".github", "workflows"))) {
+    assert.doesNotMatch(read(`.github/workflows/${name}`), /changesets\/action|changeset (?:version|tag)/);
+  }
+  assert.match(read(".github/workflows/validate.yml"), /npm run check-plugin-version/);
+  assert.match(read("CHANGELOG.md"), new RegExp(`^## ${pkg.version.replaceAll(".", "\\.")}$`, "m"));
 });
 
 test("manifest exposes exactly the promoted skills with unique matching names", () => {

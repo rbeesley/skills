@@ -1,6 +1,6 @@
 # rbeesley-skills
 
-## 1.4.0
+## 1.3.2-rbeesley.1
 
 - Establish `rbeesley-skills@rbeesley` as the independently maintained Copilot/ADO fork, preserving upstream attribution and MIT license.
 - Rename setup/router commands to `setup-rbeesley-skills` and `ask-rbeesley` and update their operational pointers.
@@ -9,6 +9,7 @@
 - Wire setup, planning, triage, implementation, review, prototype capture, and wizard platform boundaries to the repository contract.
 - Document isolated preview, live local activation, source switching, and rollback without disturbing other plugins.
 - Add offline packaging/contract regression checks and read-only behavioral scenarios.
+- Derive the SemVer-compatible fork release from explicit upstream baseline/revision metadata; preserve unversioned lock placeholders and retire the lineage-losing automatic Changesets release workflow.
 
 Versions below are preserved upstream mattpocock-skills history, not fork installation instructions.
 
