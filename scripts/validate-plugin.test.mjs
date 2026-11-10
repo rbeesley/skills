@@ -22,15 +22,15 @@ const workflowConsumers = [
 ];
 const skill = (name) => read(`skills/engineering/${name}/SKILL.md`);
 
-test("fork identity and versions agree across package, lock, plugin, marketplace", () => {
+test("fork identity and release versions agree while lock placeholders remain unversioned", () => {
   const lock = json("package-lock.json");
   assert.equal(pkg.name, "rbeesley-skills");
   assert.equal(plugin.name, pkg.name);
   assert.equal(plugin.version, pkg.version);
   assert.equal(lock.name, pkg.name);
-  assert.equal(lock.version, pkg.version);
+  assert.equal(lock.version, "0.0.0");
   assert.equal(lock.packages[""].name, pkg.name);
-  assert.equal(lock.packages[""].version, pkg.version);
+  assert.equal(lock.packages[""].version, "0.0.0");
   assert.equal(marketplace.name, "rbeesley");
   assert.equal(marketplace.plugins.length, 1);
   assert.equal(marketplace.plugins[0].name, pkg.name);

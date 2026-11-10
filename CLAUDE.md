@@ -10,6 +10,8 @@ Every skill in `engineering/` or `productivity/` (the **promoted** buckets) must
 
 Install commands come from [.agents/install-block.md](./.agents/install-block.md). The fork is `rbeesley-skills@rbeesley`; upstream identity remains attribution, never an update target. Run `npm test` and `npm run check-plugin-version` after touching manifests. Verify Copilot exposure with an isolated home or session-only plugin directory before activation. [ADR 0002](./.agents/adr/0002-ship-as-a-claude-code-plugin.md) records the historical upstream packaging decision; it does not override the fork's installation guide.
 
+The lockfile's top-level `version` and `packages[""].version` retain upstream's `0.0.0` placeholders. They are dependency-lock metadata, not release-version sources; `package.json` and the plugin manifest carry the release identity.
+
 Each skill entry in the top-level `README.md` must link the skill name to its `SKILL.md`.
 
 Each bucket folder has a `README.md` that lists every skill in the bucket with a one-line description, with the skill name linked to its `SKILL.md`. The promoted buckets' `README.md`s and the top-level `README.md` group entries into **User-invoked** and **Model-invoked**; non-promoted bucket `README.md`s (`misc/`, `in-progress/`) use a flat list.
