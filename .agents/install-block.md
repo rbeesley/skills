@@ -13,7 +13,13 @@ copilot plugin install rbeesley-skills@rbeesley
 
 In isolation, set `COPILOT_HOME` to a new scratch directory first, or use `COPILOT_PLUGIN_DIR_ONLY=true` with `--plugin-dir <checkout>` for a session-only preview. Neither changes the normal installed set.
 
-Before normal activation, record the installed set and preserve the existing settings. Install and verify the fork, then remove only `mattpocock-skills@mattpocock`. Retain its marketplace for rollback. Do not copy skills into personal directories too: that duplicates registrations. Preserve all unrelated marketplaces, plugins, and settings. Existing chats keep their loaded context; verify a fresh session without restarting them.
+Before normal activation, record the installed set and preserve the plugin settings. Install and verify the fork, then disable only `mattpocock-skills@mattpocock` for future sessions:
+
+```powershell
+copilot plugin disable mattpocock-skills@mattpocock
+```
+
+Keep its cached files while existing chats may still reference them; uninstall only after those sessions no longer depend on them. Retain its marketplace for rollback. Do not copy skills into personal directories too: that duplicates registrations. Preserve all unrelated marketplaces, plugins, and settings. Existing chats keep their loaded context; verify a fresh session without restarting them.
 
 Local live plugins update when their checkout changes, not from GitHub automatically. Pull/rebase deliberately; a development checkout is trusted executable configuration. Do not enable automatic updates on a local path.
 
@@ -34,7 +40,9 @@ The current Copilot app and `agency copilot` share the installed Copilot plugin 
 
 ```powershell
 copilot plugin uninstall rbeesley-skills@rbeesley
-copilot plugin install mattpocock-skills@mattpocock
+copilot plugin enable mattpocock-skills@mattpocock
 ```
 
 Verify only one copy of each skill in a new session. Keep the local worktree until no live plugin or session depends on it. Other harnesses may consume the compatible `.claude-plugin` bundle, but this fork's activation checks target Copilot; upstream installation promises are not fork validation.
+
+If upstream was uninstalled after its old sessions ended, reinstall it from the retained marketplace instead of enabling it.

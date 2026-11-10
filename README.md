@@ -15,7 +15,7 @@ copilot plugin marketplace add D:\wt\GitHub\rbeesley\skills\copilot-ado
 copilot plugin install rbeesley-skills@rbeesley
 ```
 
-Verify the fork in isolation first. When replacing upstream, remove only `mattpocock-skills@mattpocock` after the fork loads successfully, preserving all other plugins/settings. Existing conversations retain loaded context; use a fresh Copilot app or `agency copilot` session to pick up the replacement. Keep the worktree available while it is a live plugin source.
+Verify the fork in isolation first. When replacing upstream, disable only `mattpocock-skills@mattpocock` after the fork loads successfully, preserving all other plugins/settings. Keep its cached files until existing conversations no longer reference them. Use a fresh Copilot app or `agency copilot` session to pick up the replacement. Keep the worktree available while it is a live plugin source.
 
 After publication to the fork's default branch, GitHub-source installation is:
 
@@ -26,7 +26,7 @@ copilot plugin install rbeesley-skills@rbeesley
 
 Local and GitHub registrations use the same marketplace name: switch the registration explicitly rather than assuming it retargets. Local installs follow checkout changes; they do not auto-pull GitHub. See the [installation, isolated preview, updates, and rollback guide](./.agents/install-block.md) before switching sources.
 
-Rollback removes the fork and reinstalls `mattpocock-skills@mattpocock` from its retained marketplace. Never replace the entire settings file to switch one plugin.
+Rollback removes the fork and re-enables `mattpocock-skills@mattpocock` (or reinstalls it from its retained marketplace if previously uninstalled). Never replace the entire settings file to switch one plugin.
 
 ## Configure each repository
 
